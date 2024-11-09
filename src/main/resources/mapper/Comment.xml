@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="pers.dao.CommentMapper">
+  <resultMap id="BaseResultMap" type="pers.domain.Comment">
+    <!-- 主键映射 -->
+    <id column="commentId" jdbcType="BIGINT" property="commentId" />
+
+    <!-- 普通字段映射 -->
+    <result column="commentText" jdbcType="LONGVARCHAR" property="commentText" />
+    <result column="reviewId" jdbcType="BIGINT" property="reviewId" />
+    <result column="replyContent" jdbcType="LONGVARCHAR" property="replyContent" />
+    <result column="commentType" jdbcType="INTEGER" property="commentType" />
+    <result column="replyStatus" jdbcType="INTEGER" property="replyStatus" />
+    <result column="platformType" jdbcType="INTEGER" property="platformType" />
+    <result column="createTime" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="updateTime" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="itemId" jdbcType="VARCHAR" property="itemId" />
+    <result column="userReplyTime" jdbcType="TIMESTAMP" property="userReplyTime" />
+  </resultMap>
+
+
+  <select id="selectByCondition" resultType="pers.domain.Comment">
+    SELECT * FROM comment
+    <where>
+      <!-- startTime 条件 -->
+      <if test="startTime != null">
+        AND createTime &gt;= #{startTime}
+      </if>
+
+      <!-- endTime 条件 -->
+      <if test="endTime != null">
+        AND createTime &lt;= #{endTime}
+      </if>
+
+      <!-- platform 条件 -->
+      <if test="platform != null">
+        AND platformType = #{platform}
+      </if>
+
+      <!-- commentType 条件 -->
+      <if test="commentType != null">
+        AND commentType = #{commentType}
+      </if>
+
+      <!-- replyType 条件 -->
+      <if test="replyType != null">
+        AND replyStatus = #{replyType}
+      </if>
+    </where>
+
+    order by createTime desc
+
+  </select>
+</mapper>
